@@ -11,7 +11,7 @@ class Election extends Model
 {
     use HasFactory, HasUuids;
 
-    protected $fillable = ['title', 'active', 'expiry'];
+    protected $fillable = ['title', 'active', 'period_id'];
 
     public function candidates(): HasMany
     {

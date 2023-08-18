@@ -13,9 +13,8 @@ return new class extends Migration
     {
         Schema::create('elections', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->string('title');
+            $table->string('title')->unique();
             $table->boolean('active')->default(false);
-            $table->dateTime('expiry');
             $table->timestamps();
         });
     }
