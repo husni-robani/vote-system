@@ -15,6 +15,15 @@ use Inertia\Inertia;
 | contains the "web" middleware group. Now create something great!
 |
 */
+//contoh perkiraan route election
+//Route::get('election/{name}/{token}', function (){
+//
+//})->middleware(['election.active', 'verified.election.link']);
+
+
+Route::get('/election/email/{name}', function (){
+   return 'test';
+})->middleware('election.active');
 
 Route::get('/', function () {
     return Inertia::render('Welcome', [
