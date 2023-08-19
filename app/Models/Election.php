@@ -23,4 +23,9 @@ class Election extends Model
         return $this->hasMany(Voter::class);
     }
 
+    public function voteLinks(): HasMany
+    {
+        return $this->hasMany(VoteLink::class, 'election_id');
+    }
+
 }
