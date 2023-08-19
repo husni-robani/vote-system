@@ -25,6 +25,18 @@ Route::get('/election/email/{name}', function (){
    return 'test';
 })->middleware('election.active');
 
+Route::middleware('election.active')->group(function () {
+   Route::get('election/{title}/requestLink', [\App\Http\Controllers\VoteController::class, 'requestLink'])->name('election.requestLink');
+   Route::post('election/{title}/sendLink', [\App\Http\Controllers\VoteController::class, 'storeEmail'])->name('election.storeEmail');
+   Route::get('election/{title}/{token}', [\App\Http\Controllers\VoteController::class, 'create'])->name('election');
+});
+
+Route::get('/test', function (){
+    $election = \App\Models\Election::first();
+    $voteLink = $election->voteLinks[0];
+    dd($voteLink);
+});
+
 Route::get('/', function () {
     return Inertia::render('Welcome', [
         'canLogin' => Route::has('login'),

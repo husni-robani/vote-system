@@ -16,7 +16,7 @@ return new class extends Migration
             $table->text('link');
             $table->string('token');
             $table->string('email');
-            $table->uuid('period_id');
+            $table->foreignUuid('election_id')->constrained()->cascadeOnDelete();
             $table->timestamps();
         });
     }
