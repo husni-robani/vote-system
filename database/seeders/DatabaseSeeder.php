@@ -3,7 +3,9 @@
 namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Models\Candidate;
 use App\Models\Election;
+use App\Models\Generation;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 
@@ -18,19 +20,39 @@ class DatabaseSeeder extends Seeder
             'title' => 'Pemilihan Ketua',
             'active' => true
         ]);
-
-        $candidate = $election->candidates()->create([
-            'name' => 'Husni Robani',
-            'vision' => 'test',
-            'mission' => 'test',
+//        $generation = Generation::create([
+//            'year' => 2020
+//        ]);
+        $generation = $election->generations()->create([
+            'year' => 2020
+        ]);
+        $election->candidates()->saveMany([
+           new Candidate([
+               'name' => 'Husni Robani',
+               'vision' => fake()->text(10),
+               'mission' => fake()->text(10),
+               'number' => 1,
+           ]),
+            new Candidate([
+                'name' => 'Rijal Fauzi Iskandar',
+                'vision' => fake()->text(10),
+                'mission' => fake()->text(10),
+                'number' => 2,
+            ]),
+            new Candidate([
+                'name' => 'Zidan',
+                'vision' => fake()->text(10),
+                'mission' => fake()->text(10),
+                'number' => 3,
+            ])
         ]);
 
-        $election->voters()->create([
+        Candidate::first()->voters()->create([
             'name' => 'Alif Nuryana',
             'email' => 'nuryana.alif@widyatama.ac.id',
             'npm' => '13242132',
-            'gen' => 2020,
-            'candidate_id' => $candidate->id
+            'generation_id' => $generation->id,
+            'election_id' => $election->id
         ]);
 
          User::create([
