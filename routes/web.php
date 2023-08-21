@@ -29,22 +29,22 @@ Route::middleware('election.active')->group(function () {
    Route::get('election/{title}/requestLink', [\App\Http\Controllers\VoteController::class, 'requestLink'])->name('election.requestLink');
    Route::post('election/{title}/sendLink', [\App\Http\Controllers\VoteController::class, 'storeEmail'])->name('election.storeEmail');
    Route::get('election/{title}/{token}', [\App\Http\Controllers\VoteController::class, 'create'])->name('election');
+   Route::post('election/{title}/{token}', [\App\Http\Controllers\VoteController::class, 'store'])->name('election.store');
 });
 
 Route::get('/test', function (){
-    $election = \App\Models\Election::first();
-    $voteLink = $election->voteLinks[0];
-    dd($voteLink);
+    $election = \App\Models\Election::with('generations.voters')->get();
+    dd($election[0]->generations->all);
 });
 
-Route::get('/', function () {
-    return Inertia::render('Welcome', [
-        'canLogin' => Route::has('login'),
-        'canRegister' => Route::has('register'),
-        'laravelVersion' => Application::VERSION,
-        'phpVersion' => PHP_VERSION,
-    ]);
-});
+//Route::get('/', function () {
+//    return Inertia::render('Welcome', [
+//        'canLogin' => Route::has('login'),
+//        'canRegister' => Route::has('register'),
+//        'laravelVersion' => Application::VERSION,
+//        'phpVersion' => PHP_VERSION,
+//    ]);
+//});
 
 Route::get('/dashboard', function () {
     return Inertia::render('Dashboard');
