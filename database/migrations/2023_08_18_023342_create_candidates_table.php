@@ -17,6 +17,7 @@ return new class extends Migration
             $table->text('vision');
             $table->text('mission');
             $table->string('photo')->nullable();
+            $table->tinyInteger('number');
             $table->integer('counter')->default(0);
             $table->foreignUuid('election_id')->constrained()->cascadeOnDelete();
             $table->timestamps();

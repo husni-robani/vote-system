@@ -2,16 +2,18 @@
   <Notivue v-slot="item">
     <Notifications :item="item" :theme="materialTheme"/>
   </Notivue>
-  <div class="min-h-screen flex flex-col items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
-    <HimatifThirdLogo/>
+  <div class="min-h-screen flex flex-col items-center pt-10">
     <div class="bg-gray-100 w-full">
+      <div class="items-center justify-center flex mb-5">
+        <HimatifThirdLogo />
+      </div>
       <div class="relative sm:py-16">
         <div aria-hidden="true" class="hidden sm:block">
-          <div class="absolute inset-y-0 left-0 w-1/2 bg-gray-50 rounded-r-3xl" />
+          <div class="absolute inset-y-0 left-0 w-1/2 bg-slate-700 rounded-r-3xl" />
           <svg class="absolute top-8 left-1/2 -ml-3" width="404" height="392" fill="none" viewBox="0 0 404 392">
             <defs>
               <pattern id="8228f071-bcee-4ec8-905a-2a059a2cc4fb" x="0" y="0" width="20" height="20" patternUnits="userSpaceOnUse">
-                <rect x="0" y="0" width="4" height="4" class="text-gray-200" fill="currentColor" />
+                <rect x="0" y="0" width="4" height="4" class="text-gray-200" fill="currentColor"  />
               </pattern>
             </defs>
             <rect width="404" height="392" fill="url(#8228f071-bcee-4ec8-905a-2a059a2cc4fb)" />
@@ -33,7 +35,7 @@
               <form @submit.prevent="submit" class="mt-12 sm:mx-auto sm:max-w-lg sm:flex">
                 <div class="min-w-0 flex-1">
                   <label for="cta-email" class="sr-only">Email address</label>
-                  <input id="cta-email" v-model="form.email"  class="block w-full border border-transparent rounded-md px-5 py-3 text-base text-gray-900 placeholder-gray-500 shadow-sm focus:outline-none focus:border-transparent focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-indigo-600" placeholder="Enter your email" />
+                  <input id="cta-email" v-model="form.email"  class="block w-full border border-transparent rounded-md px-5 py-3 text-base text-gray-900 placeholder-gray-500 shadow-sm focus:outline-none focus:border-transparent focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-indigo-600" placeholder="you@widyatama.ac.id" />
                   <InputError :message="form.errors.email" />
                 </div>
                 <div class="mt-4 sm:mt-0 sm:ml-3">

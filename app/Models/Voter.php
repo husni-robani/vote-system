@@ -12,7 +12,12 @@ class Voter extends Model
 {
     use HasFactory, HasUuids, Notifiable;
 
-    protected $fillable = ['email', 'name', 'npm', 'gen', 'election_id', 'candidate_id'];
+    protected $fillable = ['email', 'name', 'npm', 'generation_id', 'candidate_id'];
+
+    public function generation(): BelongsTo
+    {
+        return $this->belongsTo(Generation::class);
+    }
 
     public function election(): BelongsTo
     {

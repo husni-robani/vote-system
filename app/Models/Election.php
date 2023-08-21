@@ -18,7 +18,12 @@ class Election extends Model
         return $this->hasMany(Candidate::class);
     }
 
-    public function voters() : HasMany
+    public function generations() : HasMany
+    {
+        return $this->hasMany(Generation::class);
+    }
+
+    public function voters(): HasMany
     {
         return $this->hasMany(Voter::class);
     }

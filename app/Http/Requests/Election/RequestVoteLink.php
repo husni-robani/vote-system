@@ -27,7 +27,7 @@ class RequestVoteLink extends FormRequest
     {
         return [
             'email' => [
-                'email', 'ends_with:@widyatama.ac.id', new NeverVote((new ElectionService())->getElectionFromTitle($this->route()->parameter('title')))
+                'email', 'ends_with:@widyatama.ac.id', new NeverVote(ElectionService::getElectionFromTitle($this->route()->parameter('title')))
             ]
         ];
     }
@@ -35,7 +35,7 @@ class RequestVoteLink extends FormRequest
     public function messages()
     {
         return [
-            'email.ends_with' => 'only receive Widyatama University email'
+            'email.ends_with' => 'only receive Widyatama email'
         ];
     }
 }

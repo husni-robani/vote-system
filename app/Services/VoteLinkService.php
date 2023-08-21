@@ -6,7 +6,17 @@ use Illuminate\Http\Request;
 
 
 class VoteLinkService{
-    public function createVoteLink(Request $request){
+    protected VoteLink $voteLink;
+
+    /**
+     * @param VoteLink $voteLink
+     */
+    public function __construct(VoteLink $voteLink)
+    {
+        $this->voteLink = $voteLink;
+    }
+
+    public static function createVoteLink(Request $request){
         //makesure when create votelink, there is no other votelink record
             //if there, delete the others
         $record = VoteLink::where('email', $request->input('email'));
@@ -14,6 +24,10 @@ class VoteLinkService{
             //make sure no records have the same email
             $record->delete();
         }
-        VoteLink::create($request->all());
+        return VoteLink::create($request->all());
+    }
+
+    public static function getFromToken($token){
+        return VoteLink::where('token', $token)->first();
     }
 }
