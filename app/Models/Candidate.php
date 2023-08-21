@@ -12,7 +12,7 @@ class Candidate extends Model
 {
     use HasFactory, HasUuids;
 
-    protected $fillable = ['name', 'vision', 'mission', 'photo', 'election_id'];
+    protected $fillable = ['name', 'vision', 'mission', 'photo', 'election_id', 'number'];
 
     public function election(): BelongsTo
     {

@@ -16,9 +16,9 @@ return new class extends Migration
             $table->string('email');
             $table->string('name');
             $table->string('npm');
-            $table->year('gen');
             $table->foreignUuid('election_id')->constrained()->cascadeOnDelete();
             $table->foreignUuid('candidate_id')->constrained()->cascadeOnDelete();
+            $table->foreignUuid('generation_id')->constrained('generations', 'id')->cascadeOnDelete();
             $table->timestamps();
         });
     }
