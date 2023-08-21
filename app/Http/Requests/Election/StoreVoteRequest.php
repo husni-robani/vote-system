@@ -2,19 +2,15 @@
 
 namespace App\Http\Requests\Election;
 
-use App\Rules\Election\NeverVote;
-use App\Rules\Election\VerifyEmail;
-use App\Services\ElectionService;
 use Illuminate\Foundation\Http\FormRequest;
 
-class RequestVoteLink extends FormRequest
+class StoreVoteRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
      */
     public function authorize(): bool
     {
-
         return true;
     }
 
@@ -26,16 +22,10 @@ class RequestVoteLink extends FormRequest
     public function rules(): array
     {
         return [
-            'email' => [
-                'email', 'ends_with:@widyatama.ac.id', new NeverVote(ElectionService::getElectionFromTitle($this->route()->parameter('title')))
-            ]
-        ];
-    }
-
-    public function messages()
-    {
-        return [
-            'email.ends_with' => 'only receive Widyatama email'
+            'name' => 'required',
+            'npm' => 'required|digits_between:6,15',
+            'generation_id' => 'required|uuid',
+            'candidate_id' => 'required|uuid'
         ];
     }
 }
