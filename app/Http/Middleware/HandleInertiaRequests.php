@@ -2,6 +2,9 @@
 
 namespace App\Http\Middleware;
 
+use App\Models\Election;
+use App\Services\ElectionService;
+use App\Services\SwitchElectionService;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
 use Tightenco\Ziggy\Ziggy;
@@ -39,6 +42,17 @@ class HandleInertiaRequests extends Middleware
                     'location' => $request->url(),
                 ]);
             },
+            'admin' => [
+                'election' => [
+                    'all' => Election::with('generations')->get(),
+                    'selected' => Election::with('generations')->find($request->route()->parameter('id')),
+                ],
+            ],
+            'notifications' => [
+                'success' => $request->session()->get('success') !== null ? $request->session()->get('success') : null,
+                'failed' => $request->session()->get('failed') !== null ? $request->session()->get('failed') : null,
+                'test' => 'test'
+            ]
         ]);
     }
 }

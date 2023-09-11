@@ -16,7 +16,7 @@ class EnsureElectionActive
      */
     public function handle(Request $request, Closure $next): Response
     {
-        $election = Election::where('title', $request->route()->parameter('title'))->first();
+        $election = Election::findOrFail($request->route()->parameter('id'));
         if ($election !== null){
             if ($election->active){
                 return $next($request);

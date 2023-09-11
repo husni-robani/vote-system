@@ -6,6 +6,7 @@ import { createInertiaApp } from '@inertiajs/vue3';
 import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
 import { ZiggyVue } from '../../vendor/tightenco/ziggy/dist/vue.m';
 import {notivue} from "notivue";
+import {Chart} from "chart.js";
 import "notivue/notifications.css" // Only needed if using built-in notifications
 import "notivue/animations.css" // Only needed if using built-in animations
 
