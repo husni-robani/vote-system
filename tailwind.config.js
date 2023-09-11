@@ -14,6 +14,8 @@ export default {
         extend: {
             fontFamily: {
                 sans: ['Figtree', ...defaultTheme.fontFamily.sans],
+                'culpa': ['"Mea Culpa"', 'cursive'],
+                'black_ops_one' : [ '"Black Ops one"' ,'"Maven Pro"', 'sans-serif']
             },
             colors: {
                 accent: "#9EBFE2",

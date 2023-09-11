@@ -86,6 +86,11 @@
     "@jridgewell/resolve-uri" "^3.1.0"
     "@jridgewell/sourcemap-codec" "^1.4.14"
 
+"@kurkle/color@^0.3.0":
+  version "0.3.2"
+  resolved "https://registry.npmjs.org/@kurkle/color/-/color-0.3.2.tgz"
+  integrity sha512-fuscdXJ9G1qb7W8VdHi+IwRqij3lBkosAm4ydQtEmbY58OzHXqQhvlxqEkoz0yssNVn38bcpRWgA9PP+OGoisw==
+
 "@nodelib/fs.scandir@2.1.5":
   version "2.1.5"
   resolved "https://registry.npmjs.org/@nodelib/fs.scandir/-/fs.scandir-2.1.5.tgz"
@@ -395,6 +400,13 @@ caniuse-lite@^1.0.30001517, caniuse-lite@^1.0.30001520:
   version "1.0.30001521"
   resolved "https://registry.npmjs.org/caniuse-lite/-/caniuse-lite-1.0.30001521.tgz"
   integrity sha512-fnx1grfpEOvDGH+V17eccmNjucGUnCbP6KL+l5KqBIerp26WK/+RQ7CIDE37KGJjaPyqWXXlFUyKiWmvdNNKmQ==
+
+chart.js@^4.4.0:
+  version "4.4.0"
+  resolved "https://registry.npmjs.org/chart.js/-/chart.js-4.4.0.tgz"
+  integrity sha512-vQEj6d+z0dcsKLlQvbKIMYFHd3t8W/7L2vfJIbYcfyPcRx92CsHqECpueN8qVGNlKyDcr5wBrYAYKnfu/9Q1hQ==
+  dependencies:
+    "@kurkle/color" "^0.3.0"
 
 chokidar@^3.5.3:
   version "3.5.3"
@@ -1089,7 +1101,7 @@ vite-plugin-full-reload@^1.0.5:
   optionalDependencies:
     fsevents "~2.3.2"
 
-vue@^3.0.0, vue@^3.2.0, vue@^3.2.25, vue@^3.2.41, "vue@>= 3", vue@3.3.4:
+vue@^3.0.0, vue@^3.0.0-0, vue@^3.2.0, vue@^3.2.25, vue@^3.2.41, "vue@>= 3", vue@3.3.4:
   version "3.3.4"
   resolved "https://registry.npmjs.org/vue/-/vue-3.3.4.tgz"
   integrity sha512-VTyEYn3yvIeY1Py0WaYGZsXnz3y5UnGi62GjVEqvEGPl6nxbOrCXbVOTQWBEJUqAyTUk2uJ5JLVnYJ6ZzGbrSw==
@@ -1110,6 +1122,11 @@ vue@3.2.47:
     "@vue/runtime-dom" "3.2.47"
     "@vue/server-renderer" "3.2.47"
     "@vue/shared" "3.2.47"
+
+vue3-nl2br@^0.1.5:
+  version "0.1.5"
+  resolved "https://registry.npmjs.org/vue3-nl2br/-/vue3-nl2br-0.1.5.tgz"
+  integrity sha512-0N/jsnVJhn2MkI8SR8Ku3KABdmkin/X6XAQsRbavgxkPZq8OUszNBcPb9U07OJPocitbjxncwXpd4yVywk7XzQ==
 
 wrappy@1:
   version "1.0.2"

@@ -6,20 +6,26 @@ use App\Http\Requests\Election\RequestVoteLink;
 use App\Http\Requests\Election\StoreVoteRequest;
 use App\Mail\ElectionMail;
 use App\Models\Candidate;
+use App\Models\Election;
 use App\Services\CandidateService;
 use App\Services\ElectionService;
 use App\Services\VoteLinkService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Str;
 use Inertia\Inertia;
 
 class VoteController extends Controller
 {
+    public function index(Request $request){
+        return Inertia::render('Election/Elections');
+    }
+
     public function requestLink(Request $request){
-        return Inertia::render('Election/Registration')->with('election.selected', $request->route()->parameter('title'));
+        return Inertia::render('Election/Registration')->with('election.selected', $request->route()->parameter('id'));
     }
 
     public function storeEmail(RequestVoteLink $request){
@@ -31,23 +37,23 @@ class VoteController extends Controller
         //create signed Url tha has expiry time
         //TODO : try to implement temporarySignedRoute with setDate() method, which should to utilize the expiry date on election
         $signedUrl = URL::temporarySignedRoute('election', now()->addDay(), [
-            'title' => $request->route()->parameter('title'),
+            'id' => $request->route()->parameter('id'),
             'token' => $token
         ]);
 
         try {
-            $election = ElectionService::getElectionFromTitle($request->route()->parameter('title'));
+            $election = Election::findOrFail($request->route()->parameter('id'));
             $request->merge(['link' => $signedUrl, 'token' => $token, 'election_id' => $election->getAttribute('id')]);
             VoteLinkService::createVoteLink($request);
 
             //Sending link to email voter
-            Mail::to($request->input('email'))->send(new ElectionMail($signedUrl));
+            Mail::to($request->input('email'))->send(new ElectionMail($signedUrl, $election->title));
         }catch (\Exception $exception){
             return $exception;
         }
 
 
-        return to_route('election.requestLink', $request->route()->parameter('title'));
+        return to_route('election.requestLink', $request->route()->parameter('id'));
 
     }
 
@@ -60,16 +66,17 @@ class VoteController extends Controller
         }
 
         try {
-            $election = ElectionService::getElectionFromTitle($request->route()->parameter('title'));
-            $candidates = $election->candidates()->get();
+            $election = Election::findOrFail($request->route()->parameter('id'));
+            $candidates = $election->candidates;
             $generations = $election->generations()->get();
-            return Inertia::render('Election/Vote', compact('candidates', 'generations'))->with('election', [
-                'selected' => $request->route()->parameter('title'),
-                'token' => $request->route()->parameter('token')
-            ]);
+            $email = VoteLinkService::getFromToken($request->route()->parameter('token'))->email;
         }catch (\Exception $exception){
             return $exception;
         }
+        return Inertia::render('Election/Vote', compact('candidates', 'generations', 'email'))->with('election', [
+            'selected' => $request->route()->parameter('id'),
+            'token' => $request->route()->parameter('token'),
+        ]);
     }
 
     public function store(StoreVoteRequest $request){
@@ -85,7 +92,7 @@ class VoteController extends Controller
             //create voter
         try {
             $request->merge(['email' => $email]);
-            $electionService = new ElectionService( ElectionService::getElectionFromTitle($request->route()->parameter('title')));
+            $electionService = new ElectionService(Election::findOrFail($request->route()->parameter('id')));
             $electionService->createVoter($request);
         }catch (\Exception $exception){
             return $exception;
@@ -98,5 +105,20 @@ class VoteController extends Controller
             //delete vote_link
         $voteLink->delete();
         return Inertia::render('Election/Finish');
+    }
+
+    public function firstStep(Request $request){
+        $request->validate([
+            'name' => 'required',
+            'npm' => 'required|digits_between:6,15',
+            'generation_id' => 'required|uuid'
+        ]);
+
+        return back();
+    }
+
+    public function result(Request $request){
+        $election = Election::findOrFail($request->route()->parameter('id'))->load(['candidates.voters', 'voters', 'generations.voters']);
+        return Inertia::render('Election/Result', compact('election'));
     }
 }

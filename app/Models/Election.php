@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Election extends Model
 {
@@ -31,6 +32,11 @@ class Election extends Model
     public function voteLinks(): HasMany
     {
         return $this->hasMany(VoteLink::class, 'election_id');
+    }
+
+    public function resultLink(): HasOne
+    {
+        return $this->hasOne(ResultLink::class);
     }
 
 }

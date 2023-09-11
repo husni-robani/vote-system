@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\Election;
 
+use App\Models\Election;
 use App\Rules\Election\NeverVote;
 use App\Rules\Election\VerifyEmail;
 use App\Services\ElectionService;
@@ -27,7 +28,7 @@ class RequestVoteLink extends FormRequest
     {
         return [
             'email' => [
-                'email', 'ends_with:@widyatama.ac.id', new NeverVote(ElectionService::getElectionFromTitle($this->route()->parameter('title')))
+                'email', 'ends_with:@widyatama.ac.id', new NeverVote(Election::findOrFail($this->route()->parameter('id')))
             ]
         ];
     }

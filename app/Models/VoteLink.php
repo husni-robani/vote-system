@@ -8,8 +8,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class VoteLink extends Model
 {
-    use HasFactory;
-
     protected $fillable = ['link', 'email', 'token', 'election_id'];
 
     public function election(): BelongsTo

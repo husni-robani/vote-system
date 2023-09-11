@@ -17,7 +17,8 @@ class ElectionMail extends Mailable
      * Create a new message instance.
      */
     public function __construct(
-        protected $link
+        protected $link,
+        protected $election
     )
     {
 
@@ -40,7 +41,10 @@ class ElectionMail extends Mailable
     {
         return new Content(
             markdown: 'mail.election-mail',
-            with: ['link' => $this->link]
+            with: [
+                'link' => $this->link,
+                'election' => $this->election,
+                ]
         );
     }
 
