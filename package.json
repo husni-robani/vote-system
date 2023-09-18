@@ -22,6 +22,8 @@
         "@duskmoon/vue3-typed-js": "^0.0.4",
         "@headlessui/vue": "^1.7.16",
         "@heroicons/vue": "^2.0.18",
-        "notivue": "^1.2.3"
+        "chart.js": "^4.4.0",
+        "notivue": "^1.2.3",
+        "vue3-nl2br": "^0.1.5"
     }
 }
