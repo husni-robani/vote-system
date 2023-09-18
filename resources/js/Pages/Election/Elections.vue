@@ -5,7 +5,7 @@
       <p class="text-center">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Qui, quisquam!</p>
     </div>
     <div class="container flex flex-wrap justify-center items-center mx-auto my-10 gap-x-8 gap-y-10">
-      <Link :href="route('election.requestLink', {id : election.id})" v-for="election in $page.props.admin.election.all" :key="election.id" class="p-4 border shadow-md rounded-md space-y-2 w-80 overflow-hidden">
+      <Link :href="route('election.requestLink', {id : election.id})" v-for="election in $page.props.admin.election.all" :key="election.id" class="p-4 border shadow-md rounded-md space-y-2 w-80 overflow-hidden hover:scale-105 transition-all">
         <h1 class="font-extrabold text-xl line-clamp-2 h-16">{{election.title}}</h1>
         <span :class="[election.active ? 'bg-emerald-100 text-emerald-600' : 'bg-gray-200 text-gray-600', 'inline-flex items-center px-2.5 py-0.5 rounded-md text-sm font-medium']">
           <svg :class="[election.active ? 'text-emerald-600 animate-pulse' : 'text-gray-600' , '-ml-0.5 mr-1.5 h-2 w-2']" fill="currentColor" viewBox="0 0 8 8">

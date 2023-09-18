@@ -34,7 +34,7 @@ Route::middleware('election.active')->group(function () {
    Route::post('election/{id}/{token}/first-step', [\App\Http\Controllers\VoteController::class, 'firstStep'])->name('election.first-step');
 });
 Route::get('/result/{id}', [\App\Http\Controllers\VoteController::class, 'result'])->name('election.result');
-Route::get('/election/elections', [\App\Http\Controllers\VoteController::class, 'index'])->name('election.menu');
+Route::get('/', [\App\Http\Controllers\VoteController::class, 'index'])->name('election.menu');
 
 Route::get('/test', function (){
    return Inertia::render('Election/Finish');
