@@ -1,5 +1,6 @@
 <!-- This example requires Tailwind CSS v2.0+ -->
 <template>
+  <Head title="Election"/>
   <div class="flex flex-col min-h-screen bg-white">
     <div class="py-3 px-5 flex items-center justify-between border w-full bg-white">
       <div class="flex items-center space-x-2">
@@ -14,7 +15,7 @@
       </div>
     </div>
 
-    <main class="">
+    <main>
       <slot/>
     </main>
 
@@ -36,6 +37,7 @@
 
 <script setup>
 import { defineComponent, h } from 'vue'
+import {Head} from "@inertiajs/vue3";
 import HimatifPrimaryLogo from "@/Assets/HimatifPrimaryLogo.vue";
 const navigation = [
   {
