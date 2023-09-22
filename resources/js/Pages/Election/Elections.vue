@@ -2,7 +2,7 @@
   <ElectionLayout>
     <div class="mx-auto">
       <h1 class="mx-auto text-5xl font-extrabold text-center mt-16">Election List</h1>
-      <p class="text-center">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Qui, quisquam!</p>
+      <p class="text-center">choose the active election, don't choose the inactive one</p>
     </div>
     <div class="container flex flex-wrap justify-center items-center mx-auto my-10 gap-x-8 gap-y-10">
       <Link :href="route('election.requestLink', {id : election.id})" v-for="election in $page.props.admin.election.all" :key="election.id" class="p-4 border shadow-md rounded-md space-y-2 w-80 overflow-hidden hover:scale-105 transition-all">
