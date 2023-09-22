@@ -74,8 +74,8 @@ function submit(){
 
 <template>
   <ElectionLayout>
-    <div class="min-h-full">
-      <div class="max-w-7xl mx-auto px-4">
+    <div class="min-h-full max-w-7xl mx-auto">
+      <div class="mx-auto px-4 w-full">
         <h4 class="sr-only">Steps</h4>
         <div class="mt-6" aria-hidden="true">
           <div class="bg-gray-200 rounded-full overflow-hidden">
@@ -83,13 +83,13 @@ function submit(){
           </div>
           <div class="hidden sm:grid grid-cols-3 text-sm font-medium text-gray-600 mt-6">
             <div :class="[formStep > 1 ? 'text-accent': '']">Personal Information</div>
-            <div :class="[formStep > 2 ? 'text-accent' : '', 'text-center']">Vote Candidate</div>
+            <div :class="[formStep >= 2 ? 'text-accent' : '', 'text-center']">Vote Candidate</div>
             <div :class="[formStep > 3 ? 'text-accent' : '', 'text-right']">Finish</div>
           </div>
         </div>
       </div>
 
-      <div class="flex flex-col max-w-7xl mt-10 mx-auto px-4 sm:px-6 lg:px-8 py-2 space-y-10">
+      <div class="flex flex-col w-full mt-10 mx-auto px-4 sm:px-6 lg:px-8 py-2 space-y-10">
         <!----header ---->
         <div class="mx-auto">
           <p v-show="formStep === 1" class="text-4xl font-extrabold">Complete Your Profile</p>
@@ -123,7 +123,7 @@ function submit(){
               </div>
               <div>
                 <Listbox as="div" v-model="form.generation_id">
-                  <ListboxLabel class="block text-sm font-medium text-gray-700">Your Generation</ListboxLabel>
+                  <ListboxLabel class="block text-sm font-medium text-gray-700">Gen</ListboxLabel>
                   <div class="mt-1 relative">
                     <ListboxButton class="bg-white relative w-full border border-gray-300 rounded-md shadow-sm pl-3 pr-10 py-2 text-left cursor-default focus:outline-none focus:ring-1 focus:ring-accent focus:border-accent sm:text-sm">
                       <span class="block truncate">{{ form.generation_id.year }}</span>
@@ -155,7 +155,7 @@ function submit(){
             <!---- Select Candidate Form ---->
             <div v-show="formStep === 2" class="">
               <RadioGroup v-model="form.candidate_id">
-                <div class="grid grid-cols-2 justify-around gap-y-6 gap-x-8 max-w-lg sm:w-full sm:grid-cols-3 sm:gap-x-12 sm:max-w-4xl mx-auto justify-items-center">
+                <div class="grid grid-cols-2 justify-around gap-y-6 gap-x-8 max-w-lg sm:w-full sm:grid-cols-2 sm:gap-x-12 sm:max-w-xl mx-auto justify-items-center">
                   <RadioGroupOption as="template" v-for="candidate in candidates" :key="candidate.id" :value="candidate.id" v-slot="{ checked, active }">
                     <div :class="[checked ? 'border-4 border-accent' : 'border-gray-300', active ? 'ring-2 ring-accent' : '', 'relative bg-white border rounded-lg shadow-lg flex cursor-pointer focus:outline-none']">
                       <div class="flex-1 flex">
@@ -179,7 +179,7 @@ function submit(){
             </div>
 
 
-            <div class="flex flex-row-reverse max-w-xs sm:max-w-xl mx-auto">
+            <div class="flex flex-row-reverse max-w-2xl mx-auto">
               <button v-show="formStep === 1" type="button" @click="nextStep"  class="group relative max-w-xl items-center space-x-2 flex justify-center py-2 pl-4 pr-2 border border-transparent text-sm font-medium rounded-md text-white bg-gray-600 hover:bg-slate-950">
                 Next
                 <ChevronRightIcon class="w-4 text-white"/>
@@ -189,7 +189,7 @@ function submit(){
                   <ChevronLeftIcon class="w-4 text-white"/>
                   Prev
                 </button>
-                <button v-show="formStep === 2" type="submit" class="group relative  max-w-xl items-center space-x-2 flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-accent hover:bg-accent_old">
+                <button v-show="formStep === 2 && form.candidate_id !== null" type="submit" class='group relative  max-w-xl items-center space-x-2 flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-accent hover:bg-accent_old'>
                   Send Vote
                 </button>
               </div>

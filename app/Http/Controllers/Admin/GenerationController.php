@@ -17,7 +17,7 @@ class GenerationController extends Controller
             Generation::create($request->all());
             return to_route('admin.vote-System.edit', $request->route()->parameter('id'));
         }catch (\Exception $exception){
-            return $exception;
+            abort(500, $exception->getMessage());
         }
     }
 
@@ -27,7 +27,7 @@ class GenerationController extends Controller
             $gen->delete();
             return to_route('admin.vote-System.edit', $id);
         }catch (\Exception $exception){
-            return $exception;
+            abort(500, $exception->getMessage());
         }
     }
 }

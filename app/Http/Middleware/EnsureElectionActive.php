@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Exceptions\InActiveElectionException;
 use App\Models\Election;
 use Closure;
 use Illuminate\Http\Request;
@@ -22,6 +23,7 @@ class EnsureElectionActive
                 return $next($request);
             }
         }
-         abort(403);
+//         abort(403, 'FORBIDDEN');
+        throw new InActiveElectionException();
     }
 }

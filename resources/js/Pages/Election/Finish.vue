@@ -23,13 +23,23 @@
         </div>
       </div>
       <div class="flex items-center justify-center mt-5">
-        <p class="text-lg text-secondaryAccent">We'll send the result to your email</p>
+        <a :href="link" target="_blank" class="flex items-center text-lg text-secondaryAccent hover:border-b border-secondaryAccent cursor-pointer">
+          see results
+          <span>
+            <ArrowRightIcon class="w-6"/>
+          </span>
+        </a>
       </div>
     </div>
   </ElectionLayout>
 </template>
 <script setup>
-import {CheckCircleIcon} from "@heroicons/vue/20/solid/index.js";
+import {CheckCircleIcon, ArrowRightIcon} from "@heroicons/vue/20/solid/index.js";
 import ElectionLayout from "@/Layouts/ElectionLayout.vue";
 import HimatifThirdLogo from "@/Assets/HimatifThirdLogo.vue";
+defineProps({
+  link: {
+    required: false
+  }
+})
 </script>
