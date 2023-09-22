@@ -27,7 +27,7 @@ class VoterController extends Controller
                 });
             }
         }catch (\Exception $exception){
-            return $exception;
+            abort(500, $exception->getMessage());
         }
         return Inertia::render('Admin/Election/Voters', compact('voters'));
     }
@@ -38,7 +38,7 @@ class VoterController extends Controller
             $voter->delete();
             return \Redirect::back();
         }catch (\Exception $exception){
-            return $exception;
+            abort(500, $exception->getMessage());
         }
     }
 }

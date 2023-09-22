@@ -33,7 +33,7 @@ class CandidateController extends Controller
                 'voters' => $voters
             ]);
         }catch (\Exception $exception){
-            return $exception;
+            abort(500, $exception->getMessage());
         }
     }
 
@@ -43,7 +43,7 @@ class CandidateController extends Controller
             $candidate->delete();
             return to_route('admin.vote-system.candidates', $request->route()->parameter('id'))->with('success', 'Candidate Success to Delete');
         }catch (\Exception $exception){
-            return $exception;
+            abort(500, $exception->getMessage());
         }
     }
 
@@ -64,7 +64,7 @@ class CandidateController extends Controller
             $candidate->photo = $photo;
             $candidate->save();
         }catch (\Exception $exception){
-            return $exception;
+            abort(500, $exception->getMessage());
         }
         return  \Redirect::route('admin.vote-system.candidates', $request->route()->parameter('id'))->with('success', 'New Candidate Success to Added');
     }
@@ -75,7 +75,7 @@ class CandidateController extends Controller
             $candidate->update($request->all());
             return back();
         }catch (\Exception $exception){
-            return $exception;
+            abort(500, $exception->getMessage());
         }
     }
 }

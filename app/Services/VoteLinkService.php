@@ -2,6 +2,7 @@
 namespace App\Services;
 
 use App\Models\VoteLink;
+use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 
 

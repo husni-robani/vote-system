@@ -33,7 +33,7 @@ class ElectionController extends Controller
             $election = ElectionService::create($request->all());
             return to_route('admin.vote-system', $election->id)->with('success', 'success to create new election');
         }catch (\Exception $exception){
-            return $exception;
+            abort(500, $exception->getMessage());
         }
     }
 
@@ -49,7 +49,7 @@ class ElectionController extends Controller
             Election::findOrFail($request->route()->parameter('id'))->update($request->all());
             return back();
         }catch (\Exception $exception){
-            return $exception;
+            abort(500, $exception->getMessage());
         }
     }
 
@@ -64,7 +64,7 @@ class ElectionController extends Controller
                 return to_route('admin.vote-system.random')->with('success', 'Delete Section Success');
             }
         }catch (\Exception $exception){
-            return $exception;
+            abort(500, $exception->getMessage());
         }
     }
 }

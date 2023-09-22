@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\Election\RequestVoteLink;
 use App\Http\Requests\Election\StoreVoteRequest;
+use App\Jobs\SendVoteEmail;
 use App\Mail\ElectionMail;
 use App\Models\Candidate;
 use App\Models\Election;
@@ -11,6 +12,8 @@ use App\Services\CandidateService;
 use App\Services\ElectionService;
 use App\Services\VoteLinkService;
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
@@ -30,12 +33,9 @@ class VoteController extends Controller
 
     public function storeEmail(RequestVoteLink $request){
         //checking voter is never voted, done in RequestVoteLink form request
-
         //token create for identify the email to get in the store method
         $token = Str::random(5);
 
-        //create signed Url tha has expiry time
-        //TODO : try to implement temporarySignedRoute with setDate() method, which should to utilize the expiry date on election
         $signedUrl = URL::temporarySignedRoute('election', now()->addDay(), [
             'id' => $request->route()->parameter('id'),
             'token' => $token
@@ -44,23 +44,23 @@ class VoteController extends Controller
         try {
             $election = Election::findOrFail($request->route()->parameter('id'));
             $request->merge(['link' => $signedUrl, 'token' => $token, 'election_id' => $election->getAttribute('id')]);
-            VoteLinkService::createVoteLink($request);
-
+            $voteLink = VoteLinkService::createVoteLink($request);
             //Sending link to email voter
-            Mail::to($request->input('email'))->send(new ElectionMail($signedUrl, $election->title));
+            dispatch(new SendVoteEmail($voteLink, $election->title));
+        }catch (ModelNotFoundException $exception){
+            return Inertia::render('errors/500', [
+                'message' => 'Election doesnt exist',
+                'originalMessage' => $exception->getMessage()
+            ]);
         }catch (\Exception $exception){
-            return $exception;
+            abort(505);
         }
-
-
         return to_route('election.requestLink', $request->route()->parameter('id'));
 
     }
 
     public function create(Request $request){
         //Check is the token exists in database
-//        dd(VoteLinkService::getFromToken($request->route()->parameter('token')));
-//        dd(VoteLinkService::getFromToken($request->route()->parameter('token')));
         if (!$request->hasValidSignature() || !VoteLinkService::getFromToken($request->route()->parameter('token'))){
             abort(401);
         }
@@ -70,8 +70,13 @@ class VoteController extends Controller
             $candidates = $election->candidates;
             $generations = $election->generations()->get();
             $email = VoteLinkService::getFromToken($request->route()->parameter('token'))->email;
+        }catch (ModelNotFoundException $exception){
+            return Inertia::render('errors/500', [
+                'message' => 'Election doesnt exist',
+                'originalMessage' => $exception->getMessage()
+            ]);
         }catch (\Exception $exception){
-            return $exception;
+            abort(500);
         }
         return Inertia::render('Election/Vote', compact('candidates', 'generations', 'email'))->with('election', [
             'selected' => $request->route()->parameter('id'),
@@ -94,8 +99,9 @@ class VoteController extends Controller
             $request->merge(['email' => $email]);
             $electionService = new ElectionService(Election::findOrFail($request->route()->parameter('id')));
             $electionService->createVoter($request);
+            $link = Election::with('resultLink')->find($request->route()->parameter('id'));
         }catch (\Exception $exception){
-            return $exception;
+            abort(500);
         }
 
             //check is create voter success
@@ -104,7 +110,9 @@ class VoteController extends Controller
         $candidateService->addCounter();
             //delete vote_link
         $voteLink->delete();
-        return Inertia::render('Election/Finish');
+        return Inertia::render('Election/Finish', [
+            'link' => $link->resultLink->link
+        ]);
     }
 
     public function firstStep(Request $request){
