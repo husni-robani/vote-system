@@ -28,7 +28,7 @@ class RequestVoteLink extends FormRequest
     {
         return [
             'email' => [
-                'email', 'ends_with:@widyatama.ac.id', new NeverVote(Election::findOrFail($this->route()->parameter('id')))
+                'email', new NeverVote(Election::findOrFail($this->route()->parameter('id')))
             ]
         ];
     }
