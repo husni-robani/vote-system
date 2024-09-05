@@ -31,13 +31,14 @@
               <div class="relative">
                 <div class="sm:text-center">
                   <h2 class="text-3xl font-extrabold text-white tracking-tight sm:text-4xl">Get Verified Link</h2>
-                  <p class="mt-6 mx-auto max-w-2xl text-lg text-white">Input your email, then we will send verified vote link to your email </p>
+                  <p class="mt-6 mx-auto max-w-2xl text-lg text-white">Input your email, we will send verified vote link to your email</p>
                 </div>
                 <form @submit.prevent="submit" class="mt-12 sm:mx-auto sm:max-w-lg sm:flex">
                   <div class="min-w-0 flex-1">
                     <label for="cta-email" class="sr-only">Email address</label>
-                    <input id="cta-email" v-model="form.email"  class="block w-full border border-transparent rounded-md px-5 py-3 text-base text-gray-900 placeholder-gray-500 shadow-sm focus:outline-none focus:border-transparent focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-indigo-600" placeholder="you@widyatama.ac.id" />
+                    <input id="cta-email" v-model="form.email"  class="block w-full border border-transparent rounded-md px-5 py-3 text-base text-gray-900 placeholder-gray-500 shadow-sm focus:outline-none focus:border-transparent focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-indigo-600" placeholder="you@example.com" />
                     <InputError :message="form.errors.email" />
+                      <p v-if="!form.errors.email" class="text-sm text-white">Note: wait until the email is successfully sent</p>
                   </div>
                   <div class="mt-4 sm:mt-0 sm:ml-3">
                     <button type="submit" class="block w-full rounded-md border border-transparent px-5 py-3 bg-slate-700 text-base font-medium text-white shadow hover:bg-slate-800 sm:px-10">Get Link</button>
@@ -77,7 +78,7 @@ function submit(){
     onSuccess: () => {
       form.reset();
       push.success({
-        message: 'Signed Url has been sent to your email',
+        message: 'Signed Url has been sent to your email (CHECK INBOX OR SPAM)',
         duration: 10000
       })
     }

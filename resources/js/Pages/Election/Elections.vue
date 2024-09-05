@@ -18,6 +18,9 @@
         </div>
       </Link>
     </div>
+      <div class="flex justify-center">
+          <Link class="underline font-bold text-gray-600 hover:text-gray-400" :href="route('login')">Admin Panel</Link>
+      </div>
   </ElectionLayout>
 </template>
 <script setup>

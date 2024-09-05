@@ -28,7 +28,7 @@
           </a>
         </div>
         <div class="mt-8 md:mt-0 md:order-1">
-          <p class="text-center text-base text-gray-400">&copy; 2023 himatif22/23</p>
+          <p class="text-center text-base text-gray-400">&copy; 2023 husni-robani</p>
         </div>
       </div>
     </footer>
