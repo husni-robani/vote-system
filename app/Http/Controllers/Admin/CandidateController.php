@@ -7,6 +7,7 @@ use App\Http\Requests\CandidateStoreRequest;
 use App\Http\Requests\CandidateUpdateRequest;
 use App\Models\Candidate;
 use App\Models\Election;
+use App\Models\Generation;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
@@ -24,13 +25,21 @@ class CandidateController extends Controller
 
     public function edit(Request $request){
         try {
-            $candidate = Candidate::with('voters')->find($request->route()->parameter('candidateId'));
+            $candidate = Candidate::with('voters', 'voters.generation', 'election.generations')->find($request->route()->parameter('candidateId'));
             $candidateAttr = $candidate->getAttributes();
             $voters = $candidate->voters;
+            $voterByGen = $candidate->voters->groupBy('generation_id');
+            $voterByGen = $voterByGen->map(function ($voters, $generation_id) {
+                return [
+                    'gen_year' => Generation::where('id', $generation_id)->first()->year,
+                    'voter_count' => $voters->count()
+                ];
+            });
             $candidate['photo'] = Storage::url($candidate['photo']);
             return Inertia::render('Admin/Election/DetailCandidate', [
                 'candidate' => $candidateAttr,
-                'voters' => $voters
+                'voters' => $voters,
+                'voter_by_gen' => $voterByGen
             ]);
         }catch (\Exception $exception){
             abort(500, $exception->getMessage());
