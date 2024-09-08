@@ -5,6 +5,7 @@ namespace Database\Seeders;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use App\Models\Candidate;
 use App\Models\User;
+use App\Models\Voter;
 use App\Services\ElectionService;
 use Illuminate\Database\Seeder;
 use Illuminate\Http\File;
@@ -17,22 +18,6 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        $election = ElectionService::create([
-            'title' => 'Testing Vote',
-            'active' => false
-        ]);
-        $election->generations()->create([
-            'year' => 2021
-        ]);
-
-        $election = ElectionService::create([
-            'title' => 'Testing Vote Active',
-            'active' => true
-        ]);
-        $generation = $election->generations()->create([
-            'year' => 2020
-        ]);
-
         $source = public_path('default.jpg');
         $path = "";
         if (file_exists($source)){
@@ -42,6 +27,27 @@ class DatabaseSeeder extends Seeder
             $this->command->warn('Source file default.jpg not found in public directory.');
         }
 
+        $election = ElectionService::create([
+            'title' => 'Testing Vote',
+            'active' => true
+        ]);
+        $election->generations()->create([
+            'year' => 2020
+        ]);
+        $election->generations()->create([
+            'year' => 2021
+        ]);
+        $election->generations()->create([
+            'year' => 2022
+        ]);
+
+        $electionInActive = ElectionService::create([
+            'title' => 'Testing InActive Vote',
+            'active' => false
+        ]);
+        $electionInActive->generations()->create([
+            'year' => 2020
+        ]);
 
         $election->candidates()->saveMany([
            new Candidate([
@@ -66,32 +72,12 @@ class DatabaseSeeder extends Seeder
                 'photo' => $path
             ])
         ]);
+        Voter::factory(50)->create()->each(function ($voter) {
+            if ($voter) {
 
-        Candidate::first()->voters()->create([
-            'name' => fake()->name,
-            'email' => fake()->email,
-            'npm' => '13242132',
-            'generation_id' => $generation->id,
-            'election_id' => $election->id
-        ]);
-
-        Candidate::first()->voters()->create([
-            'name' => fake()->name,
-            'email' => fake()->email,
-            'npm' => '13242132',
-            'generation_id' => $generation->id,
-            'election_id' => $election->id
-        ]);
-
-        Candidate::first()->voters()->create([
-            'name' => fake()->name,
-            'email' => fake()->email,
-            'npm' => '13242132',
-            'generation_id' => $generation->id,
-            'election_id' => $election->id
-        ]);
-
-        Candidate::first()->update(['counter' => 3]);
+                $voter->candidate->update(['counter' => $voter->candidate->counter + 1]);
+            }
+        });
 
          User::create([
              'name' => 'Admin',
