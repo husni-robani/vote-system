@@ -5,18 +5,13 @@ namespace App\Http\Controllers;
 use App\Http\Requests\Election\RequestVoteLink;
 use App\Http\Requests\Election\StoreVoteRequest;
 use App\Jobs\SendVoteEmail;
-use App\Mail\ElectionMail;
 use App\Models\Candidate;
 use App\Models\Election;
 use App\Services\CandidateService;
 use App\Services\ElectionService;
 use App\Services\VoteLinkService;
-use Carbon\Carbon;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
-use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Mail;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Str;
 use Inertia\Inertia;
@@ -34,24 +29,16 @@ class VoteController extends Controller
     public function storeEmail(RequestVoteLink $request){
         //checking voter is never voted, done in RequestVoteLink form request
         //token create for identify the email to get in the store method
-        $token = Str::random(5);
-
-        $signedUrl = URL::temporarySignedRoute('election', now()->addDay(), [
-            'id' => $request->route()->parameter('id'),
-            'token' => $token
-        ]);
-
         try {
             $election = Election::findOrFail($request->route()->parameter('id'));
-            $request->merge(['link' => $signedUrl, 'token' => $token, 'election_id' => $election->getAttribute('id')]);
-            $voteLink = VoteLinkService::createVoteLink($request);
+            $voteLink = VoteLinkService::createVoteLink($election->id, $request->get('email'));
             //Sending link to email voter
             dispatch(new SendVoteEmail($voteLink, $election->title));
         }catch (ModelNotFoundException $exception){
             return Inertia::render('errors/500', [
                 'message' => 'Election doesnt exist',
                 'originalMessage' => $exception->getMessage()
-            ]);
+            ])->toResponse($request)->setStatusCode(500);
         }catch (\Exception $exception){
             abort(505);
         }
@@ -74,7 +61,7 @@ class VoteController extends Controller
             return Inertia::render('errors/500', [
                 'message' => 'Election doesnt exist',
                 'originalMessage' => $exception->getMessage()
-            ]);
+            ])->toResponse($request)->setStatusCode(404);
         }catch (\Exception $exception){
             abort(500);
         }
@@ -112,7 +99,7 @@ class VoteController extends Controller
         $voteLink->delete();
         return Inertia::render('Election/Finish', [
             'link' => $link->resultLink->link
-        ]);
+        ])->toResponse($request)->setStatusCode(201);
     }
 
     public function firstStep(Request $request){
