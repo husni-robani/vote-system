@@ -5,26 +5,8 @@ use App\Http\Controllers\Admin\ElectionController;
 use App\Http\Controllers\Admin\GenerationController;
 use App\Http\Controllers\Admin\VoteLinkController;
 use App\Http\Controllers\Admin\VoterController;
-use App\Http\Controllers\ProfileController;
-use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
-
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| contains the "web" middleware group. Now create something great!
-|
-*/
-
-
-Route::get('/election/email/{name}', function (){
-   return 'test';
-})->middleware('election.active');
 
 Route::middleware('election.active')->group(function () {
    Route::get('election/{id}/requestLink', [\App\Http\Controllers\VoteController::class, 'requestLink'])->name('election.requestLink');
@@ -33,21 +15,8 @@ Route::middleware('election.active')->group(function () {
    Route::post('election/{id}/{token}', [\App\Http\Controllers\VoteController::class, 'store'])->name('election.store');
    Route::post('election/{id}/{token}/first-step', [\App\Http\Controllers\VoteController::class, 'firstStep'])->name('election.first-step');
 });
-Route::get('/result/{id}', [\App\Http\Controllers\VoteController::class, 'result'])->name('election.result');
+Route::get('/result/{id}', [\App\Http\Controllers\ResultLinkController::class, 'index'])->name('election.result');
 Route::get('/', [\App\Http\Controllers\VoteController::class, 'index'])->name('election.menu');
-
-Route::get('/test', function (){
-   return Inertia::render('Election/Finish');
-});
-
-//Route::get('/', function () {
-//    return Inertia::render('Welcome', [
-//        'canLogin' => Route::has('login'),
-//        'canRegister' => Route::has('register'),
-//        'laravelVersion' => Application::VERSION,
-//        'phpVersion' => PHP_VERSION,
-//    ]);
-//});
 
 Route::get('/dashboard', function () {
     return Inertia::render('Dashboard');
@@ -57,9 +26,6 @@ Route::get('/admin/mainMenu', function(){
 });
 
 Route::middleware('auth')->group(function () {
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
     Route::get('/admin/menu', [\App\Http\Controllers\Admin\AdminController::class, 'menu'])->name('admin.menu');
     Route::middleware('election.available')->group(function (){
         Route::controller(ElectionController::class)->group(function () {
