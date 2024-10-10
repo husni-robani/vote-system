@@ -4,7 +4,6 @@ namespace App\Http;
 
 use App\Http\Middleware\AvailableElection;
 use App\Http\Middleware\EnsureElectionActive;
-use App\Http\Middleware\VerifyElectionLink;
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
 use Illuminate\Routing\Middleware\ValidateSignature;
 
@@ -71,7 +70,6 @@ class Kernel extends HttpKernel
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
         'election.active' => EnsureElectionActive::class,
-        'verified.election.link' => VerifyElectionLink::class,
         'election.available' => AvailableElection::class,
     ];
 }
