@@ -12,7 +12,7 @@ class Candidate extends Model
 {
     use  HasUuids;
 
-    protected $fillable = ['name', 'vision', 'mission', 'photo', 'election_id', 'number'];
+    protected $fillable = ['name', 'vision', 'mission', 'photo', 'election_id', 'number', 'counter'];
 
     public function getPhotoAttribute($value): string
     {
@@ -27,5 +27,11 @@ class Candidate extends Model
     public function voters(): HasMany
     {
         return $this->hasMany(Voter::class);
+    }
+
+    public function addCounter() : void
+    {
+        $this->counter = $this->counter + 1;
+        $this->save();
     }
 }
