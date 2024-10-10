@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Http\Middleware\HandleInertiaRequests;
 use App\Http\Requests\Admin\ElectionStoreRequest;
 use App\Models\Election;
 use App\Services\ElectionService;
@@ -18,9 +17,6 @@ class ElectionController extends Controller
     }
 
     public function switch(Request $request){
-//        dd($request->route()->parameter('id'));
-//        Inertia::share('admin.election.selected', fn (Request $request) => Election::find($request->route()->parameter('id')));
-//        Inertia::render('Admin/Election/Dashboard');
         return to_route('admin.vote-system', $request->route()->parameter('id'));
     }
 
@@ -57,11 +53,11 @@ class ElectionController extends Controller
         try{
             if (Election::count() <= 1){
                 //todo : when delete the only election, send notification cannot delete
-                return to_route('admin.vote-System.edit')->with('failed', 'This is the only election existence. You cannot delete it');
+                return back()->with('failed', 'This is the only election existence. You cannot delete it');
             }else{
                 $election = Election::find($request->route()->parameter('id'));
                 $election->delete();
-                return to_route('admin.vote-system.random')->with('success', 'Delete Section Success');
+                return to_route('admin.vote-system.random')->with('success', 'Delete Election Success');
             }
         }catch (\Exception $exception){
             abort(500, $exception->getMessage());
