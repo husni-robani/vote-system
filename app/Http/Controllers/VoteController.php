@@ -7,13 +7,9 @@ use App\Http\Requests\Election\StoreVoteRequest;
 use App\Jobs\SendVoteEmail;
 use App\Models\Candidate;
 use App\Models\Election;
-use App\Services\CandidateService;
 use App\Services\ElectionService;
 use App\Services\VoteLinkService;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\URL;
-use Illuminate\Support\Str;
 use Inertia\Inertia;
 
 class VoteController extends Controller
@@ -34,11 +30,6 @@ class VoteController extends Controller
             $voteLink = VoteLinkService::createVoteLink($election->id, $request->get('email'));
             //Sending link to email voter
             dispatch(new SendVoteEmail($voteLink, $election->title));
-        }catch (ModelNotFoundException $exception){
-            return Inertia::render('errors/500', [
-                'message' => 'Election doesnt exist',
-                'originalMessage' => $exception->getMessage()
-            ])->toResponse($request)->setStatusCode(500);
         }catch (\Exception $exception){
             abort(505);
         }
@@ -57,11 +48,6 @@ class VoteController extends Controller
             $candidates = $election->candidates;
             $generations = $election->generations()->get();
             $email = VoteLinkService::getFromToken($request->route()->parameter('token'))->email;
-        }catch (ModelNotFoundException $exception){
-            return Inertia::render('errors/500', [
-                'message' => 'Election doesnt exist',
-                'originalMessage' => $exception->getMessage()
-            ])->toResponse($request)->setStatusCode(404);
         }catch (\Exception $exception){
             abort(500);
         }
@@ -93,8 +79,7 @@ class VoteController extends Controller
 
             //check is create voter success
                 //if success counter on candidate +1
-        $candidateService = new CandidateService(Candidate::find($request->get('candidate_id')));
-        $candidateService->addCounter();
+        Candidate::find($request->get('candidate_id'))->addCounter();
             //delete vote_link
         $voteLink->delete();
         return Inertia::render('Election/Finish', [
