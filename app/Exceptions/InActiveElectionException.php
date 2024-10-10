@@ -21,6 +21,6 @@ class InActiveElectionException extends Exception
      */
     public function render(Request $request)
     {
-        return Inertia::render('errors/403');
+        return Inertia::render('errors/403')->toResponse($request)->setStatusCode(403);
     }
 }
