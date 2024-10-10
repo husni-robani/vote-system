@@ -8,7 +8,6 @@
     <div class="bg-white my-2 py-5 px-10 rounded-md shadow-md">
       <div class="mb-10">
         <h1 class="text-2xl font-bold ">List Of Candidate</h1>
-        <p class="text-sm text-gray-500">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ab aspernatur autem debitis dolorem esse eveniet explicabo praesentium quia, repellat velit?</p>
       </div>
       <ul role="list" class="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
         <li v-for="candidate in candidates" :key="candidate.email" class="col-span-1 flex flex-col text-center bg-gray-700 xl:w-80  rounded-2xl shadow-lg">

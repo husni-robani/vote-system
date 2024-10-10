@@ -69,10 +69,4 @@ const props = defineProps({
     required: true
   }
 })
-const people = [
-  { name: 'Lindsay Walton', title: 'Front-end Developer', email: 'lindsay.walton@example.com', role: 'Member' },
-]
-function deleteVoter($id){
-
-}
 </script>
