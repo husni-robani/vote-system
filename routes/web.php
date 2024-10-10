@@ -12,8 +12,8 @@ Route::middleware('election.active')->group(function () {
    Route::get('election/{id}/requestLink', [\App\Http\Controllers\VoteController::class, 'requestLink'])->name('election.requestLink');
    Route::post('election/{id}/sendLink', [\App\Http\Controllers\VoteController::class, 'storeEmail'])->name('election.storeEmail');
    Route::get('election/{id}/{token}', [\App\Http\Controllers\VoteController::class, 'create'])->name('election');
-   Route::post('election/{id}/{token}', [\App\Http\Controllers\VoteController::class, 'store'])->name('election.store');
    Route::post('election/{id}/{token}/first-step', [\App\Http\Controllers\VoteController::class, 'firstStep'])->name('election.first-step');
+   Route::post('election/{id}/{token}', [\App\Http\Controllers\VoteController::class, 'store'])->name('election.store');
 });
 Route::get('/result/{id}', [\App\Http\Controllers\ResultLinkController::class, 'index'])->name('election.result');
 Route::get('/', [\App\Http\Controllers\VoteController::class, 'index'])->name('election.menu');
@@ -26,15 +26,14 @@ Route::get('/admin/mainMenu', function(){
 });
 
 Route::middleware('auth')->group(function () {
-    Route::get('/admin/menu', [\App\Http\Controllers\Admin\AdminController::class, 'menu'])->name('admin.menu');
     Route::middleware('election.available')->group(function (){
         Route::controller(ElectionController::class)->group(function () {
-            Route::get('admin/vote-system/create/test/{id}', 'create')->name('admin.vote-system.create');
-            Route::post('admin/vote-system/store/{id}', 'store')->name('admin.vote-system.store');
             Route::get('admin/vote-system/{id}', 'index')->name('admin.vote-system');
+            Route::get('admin/vote-system/create/{id}', 'create')->name('admin.vote-system.create');
+            Route::post('admin/vote-system/create/{id}', 'store')->name('admin.vote-system.store');
             Route::get('admin/vote-system/switch/{id}', 'switch')->name('admin.vote-system.switch');
             Route::get('admin/vote-System/{id}/edit', 'edit')->name('admin.vote-System.edit');
-            Route::patch('admin/vote-system/{id}/update/profile', 'update')->name('admin.vote-system.update.profile');
+            Route::patch('admin/vote-system/{id}/update', 'update')->name('admin.vote-system.update.profile');
             Route::delete('admin/vote-system/{id}/delete', 'destroy')->name('admin.vote-system.delete');
         });
         Route::controller(GenerationController::class)->group(function (){
