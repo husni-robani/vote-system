@@ -28,18 +28,8 @@ class ElectionService{
         return $election;
     }
 
-    public static function getElectionFromTitle(string $title)
-    {
-        return Election::where('title', $title)->first();
-    }
-
     public function createVoter(Request $request){
         $this->election->voters()->create($request->all());
         return $this;
     }
-
-    public static function getActiveElectionFirst() : Election{
-        return Election::where('active', true)->first();
-    }
-
 }
