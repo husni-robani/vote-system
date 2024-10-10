@@ -16,7 +16,7 @@ class CandidateController extends Controller
 {
     public function index(Request $request){
         $election = Election::with('voters', 'candidates.voters')->where('id', $request->route()->parameter('id'))->get();
-        $candidates = $election[0]->candidates ;
+        $candidates = $election[0]->candidates;
         return Inertia::render('Admin/Election/Candidates', [
             'candidates' => $candidates,
             'totalVoter' => $election[0]->voters
@@ -48,7 +48,7 @@ class CandidateController extends Controller
 
     public function destroy(Request $request){
         try {
-            $candidate = Candidate::find($request->candidateId);
+            $candidate = Candidate::findOrFail($request->get('candidateId'));
             $candidate->delete();
             return to_route('admin.vote-system.candidates', $request->route()->parameter('id'))->with('success', 'Candidate Success to Delete');
         }catch (\Exception $exception){
@@ -57,12 +57,12 @@ class CandidateController extends Controller
     }
 
     public function store(CandidateStoreRequest $request){
-        //todo : create form request and implement imageService
         try {
             if ($request->hasFile('photo')){
-                $photo = Storage::putFile('public/photo/candidates', $request->file('photo'));
+                $photo = Storage::disk('candidate_photos')->putFile('', $request->file('photo'));
+                $full_path = 'public/candidate_photos/' . $photo;
             }else{
-                $photo = 'public/photo/candidates/default.png';
+                $full_path = 'public/candidate_photos/default.jpg';
             }
             $candidate = new Candidate();
             $candidate->election_id = $request->route()->parameter('id');
@@ -70,7 +70,7 @@ class CandidateController extends Controller
             $candidate->name = $request->input('name');
             $candidate->vision = $request->input('vision');
             $candidate->mission = $request->input('mission');
-            $candidate->photo = $photo;
+            $candidate->photo = $full_path;
             $candidate->save();
         }catch (\Exception $exception){
             abort(500, $exception->getMessage());
