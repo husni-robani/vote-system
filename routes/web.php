@@ -16,7 +16,8 @@ Route::middleware('election.active')->group(function () {
    Route::post('election/{id}/{token}', [\App\Http\Controllers\VoteController::class, 'store'])->name('election.store');
 });
 Route::get('/result/{id}', [\App\Http\Controllers\ResultLinkController::class, 'index'])->name('election.result');
-Route::get('/', [\App\Http\Controllers\VoteController::class, 'index'])->name('election.menu');
+Route::get('/', [\App\Http\Controllers\VoteController::class, 'index'])->name('election.menu')
+    ->middleware('track.new.ip');
 
 Route::get('/dashboard', function () {
     return Inertia::render('Dashboard');

@@ -4,8 +4,8 @@ namespace App\Http;
 
 use App\Http\Middleware\AvailableElection;
 use App\Http\Middleware\EnsureElectionActive;
+use App\Http\Middleware\TrackNewIp;
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
-use Illuminate\Routing\Middleware\ValidateSignature;
 
 class Kernel extends HttpKernel
 {
@@ -71,5 +71,6 @@ class Kernel extends HttpKernel
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
         'election.active' => EnsureElectionActive::class,
         'election.available' => AvailableElection::class,
+        'track.new.ip' => TrackNewIp::class
     ];
 }
